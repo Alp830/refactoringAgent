@@ -1,2 +1,2 @@
 # refactoringAgent
-anAgentThatCanRefactorCode
+an Agent That Can Refactor Code

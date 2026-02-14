@@ -1,0 +1,41 @@
+using UnityEngine;
+
+public class EnemyAI : MonoBehaviour
+{
+    public EnemyState currentState;
+
+    void Update()
+    {
+        switch (currentState)
+        {
+            case EnemyState.Idle:
+                Debug.Log("Enemy is idle");
+                break;
+
+            case EnemyState.Alerted:
+                Debug.Log("Enemy is alerted");
+                break;
+
+            case EnemyState.Chasing:
+                Debug.Log("Enemy is chasing the player");
+                break;
+
+            case EnemyState.Attacking:
+                Debug.Log("Enemy is attacking");
+                break;
+        }
+    }
+
+    public void OnPlayerSeen()
+    {
+        currentState = EnemyState.Alerted;
+    }
+}
+
+public enum EnemyState
+{
+    Idle,
+    Alerted,
+    Chasing,
+    Attacking
+}

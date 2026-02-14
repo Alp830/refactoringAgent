@@ -1,0 +1,42 @@
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public MovementState currentState;
+
+    void Update()
+    {
+        switch (currentState)
+        {
+            case MovementState.Idle:
+                Debug.Log("Player is idle");
+                break;
+
+            case MovementState.Walking:
+                Debug.Log("Player is walking");
+                break;
+
+            case MovementState.Running:
+                Debug.Log("Player is running");
+                break;
+
+            case MovementState.Jumping:
+                Debug.Log("Player is jumping");
+                break;
+        }
+    }
+
+    public void SetRunning()
+    {
+        currentState = MovementState.Running;
+    }
+}
+
+public enum MovementState
+{
+    Idle,
+    Walking,
+    Running,
+    Jumping
+}
+

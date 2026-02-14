@@ -1,0 +1,32 @@
+using UnityEngine;
+
+public class EnemyAI : MonoBehaviour
+{
+    public bool isIdle;
+    public bool isAlerted;
+    public bool isChasing;
+    public bool isAttacking;
+
+    void Update()
+    {
+        if (isIdle)
+            Debug.Log("Enemy is idle");
+
+        if (isAlerted)
+            Debug.Log("Enemy is alerted");
+
+        if (isChasing)
+            Debug.Log("Enemy is chasing the player");
+
+        if (isAttacking)
+            Debug.Log("Enemy is attacking");
+    }
+
+    public void OnPlayerSeen()
+    {
+        isIdle = false;
+        isAlerted = true;
+        isChasing = false;
+        isAttacking = false;
+    }
+}

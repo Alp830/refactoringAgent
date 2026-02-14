@@ -1,0 +1,43 @@
+using UnityEngine;
+
+public class PlayerHealth : MonoBehaviour
+{
+    public int health = 100;
+
+    public bool isAlive;
+    public bool isDead;
+    public bool isInvincible;
+    public bool isInvisible;
+
+    void Update()
+    {
+        if (isDead)
+            return;
+
+        if (isInvincible)
+            Debug.Log("Player cannot take damage");
+
+        if (isInvisible)
+            Debug.Log("Player is invisible");
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (isInvincible || isDead)
+            return;
+
+        health -= damage;
+
+        if (health <= 0)
+        {
+            isAlive = false;
+            isDead = true;
+        }
+    }
+
+    public void ActivatePowerUp()
+    {
+        isInvincible = true;
+        isInvisible = true;
+    }
+}

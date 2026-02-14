@@ -1,0 +1,27 @@
+using UnityEngine;
+
+public abstract class StatusEffect : MonoBehaviour
+{
+    public abstract void Apply();
+}
+public class PoisonEffect : StatusEffect
+{
+    public override void Apply()
+    {
+        Debug.Log("Losing health over time");
+    }
+}
+public class StunEffect : StatusEffect
+{
+    public override void Apply()
+    {
+        Debug.Log("Cannot move");
+    }
+}
+public class BurnEffect : StatusEffect
+{
+    public override void Apply()
+    {
+        Debug.Log("Taking fire damage");
+    }
+}

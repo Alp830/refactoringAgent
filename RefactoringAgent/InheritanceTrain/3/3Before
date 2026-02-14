@@ -1,0 +1,29 @@
+using UnityEngine;
+
+public class StatusEffect : MonoBehaviour
+{
+    public enum EffectType
+    {
+        Poison,
+        Stun,
+        Burn
+    }
+
+    public EffectType effectType;
+
+    public void Apply()
+    {
+        switch (effectType)
+        {
+            case EffectType.Poison:
+                Debug.Log("Losing health over time");
+                break;
+            case EffectType.Stun:
+                Debug.Log("Cannot move");
+                break;
+            case EffectType.Burn:
+                Debug.Log("Taking fire damage");
+                break;
+        }
+    }
+}

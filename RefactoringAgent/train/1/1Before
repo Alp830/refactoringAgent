@@ -1,0 +1,40 @@
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public bool isIdle;
+    public bool isWalking;
+    public bool isRunning;
+    public bool isJumping;
+
+    void Update()
+    {
+        if (isIdle)
+        {
+            Debug.Log("Player is idle");
+        }
+
+        if (isWalking)
+        {
+            Debug.Log("Player is walking");
+        }
+
+        if (isRunning)
+        {
+            Debug.Log("Player is running");
+        }
+
+        if (isJumping)
+        {
+            Debug.Log("Player is jumping");
+        }
+    }
+
+    public void SetRunning()
+    {
+        isIdle = false;
+        isWalking = false;
+        isRunning = true;
+        isJumping = false;
+    }
+}

@@ -1,0 +1,31 @@
+using UnityEngine;
+
+public class Weapon : MonoBehaviour
+{
+    public FireMode fireMode;
+
+    public void Fire()
+    {
+        switch (fireMode)
+        {
+            case FireMode.Single:
+                Debug.Log("Single shot fired");
+                break;
+
+            case FireMode.Burst:
+                Debug.Log("Burst fire");
+                break;
+
+            case FireMode.Auto:
+                Debug.Log("Automatic fire");
+                break;
+        }
+    }
+}
+
+public enum FireMode
+{
+    Single,
+    Burst,
+    Auto
+}

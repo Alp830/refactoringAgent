@@ -1,0 +1,23 @@
+using UnityEngine;
+//MovementController
+public class MovementController : MonoBehaviour
+{
+    public bool canFly;
+    public bool canSwim;
+
+    public void Move()
+    {
+        if (canFly)
+        {
+            Debug.Log("Flying movement");
+        }
+        else if (canSwim)
+        {
+            Debug.Log("Swimming movement");
+        }
+        else
+        {
+            Debug.Log("Walking movement");
+        }
+    }
+}

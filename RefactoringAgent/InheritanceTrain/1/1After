@@ -1,0 +1,46 @@
+using UnityEngine;
+//Character,
+
+public class Character : MonoBehaviour
+{
+    public int health;
+
+    public virtual void TakeDamage(int amount)
+    {
+        health -= amount;
+        Debug.Log("Character took damage");
+    }
+}
+
+
+//Player, also ignore the error that error only happens because these two scripts are in the same file, once in seperate files the error will go away
+
+using UnityEngine;
+
+public class Player : Character
+{
+    void Start()
+    {
+        health = 100;
+    }
+
+    public override void TakeDamage(int amount)
+    {
+        base.TakeDamage(amount);
+        Debug.Log("Player specific damage logic");
+    }
+}
+
+
+
+//Enemy, also ignore the error that error only happens because these two scripts are in the same file, once in seperate files the error will go away
+
+using UnityEngine;
+
+public class Enemy : Character
+{
+    void Start()
+    {
+        health = 50;
+    }
+}

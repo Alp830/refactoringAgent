@@ -1,0 +1,33 @@
+using UnityEngine;
+//Movement
+public abstract class Movement : MonoBehaviour
+{
+    public abstract void Move();
+}
+//WalkMovement
+
+public class WalkMovement : Movement
+{
+    public override void Move()
+    {
+        Debug.Log("Walking movement");
+    }
+}
+//FlyMovement
+
+public class FlyMovement : Movement
+{
+    public override void Move()
+    {
+        Debug.Log("Flying movement");
+    }
+}
+//SwimMovement
+
+public class SwimMovement : Movement
+{
+    public override void Move()
+    {
+        Debug.Log("Swimming movement");
+    }
+}

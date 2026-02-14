@@ -1,0 +1,29 @@
+//Player
+
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public int health = 100;
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        Debug.Log("Player took damage");
+    }
+}
+
+
+//Enemy, also ignore the error that error only happens because these two scripts are in the same file, once in seperate files the error will go away
+using UnityEngine;
+
+public class Enemy : MonoBehaviour
+{
+    public int health = 50;
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        Debug.Log("Enemy took damage");
+    }
+}

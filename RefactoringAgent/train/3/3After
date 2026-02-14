@@ -1,0 +1,33 @@
+using UnityEngine;
+
+public class Door : MonoBehaviour
+{
+    public DoorState currentState;
+
+    public void Interact()
+    {
+        switch (currentState)
+        {
+            case DoorState.Locked:
+                Debug.Log("Door is locked");
+                break;
+
+            case DoorState.Closed:
+                currentState = DoorState.Opening;
+                break;
+
+            case DoorState.Open:
+                currentState = DoorState.Closing;
+                break;
+        }
+    }
+}
+
+public enum DoorState
+{
+    Closed,
+    Opening,
+    Open,
+    Closing,
+    Locked
+}

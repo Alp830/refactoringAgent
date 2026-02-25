@@ -46,7 +46,7 @@ inheritance_training_data = {
     }
 }
 
-inheritance_training_data = {
+eventTrainData = {
     1: {
         "before": "InheritanceTrain/1/1Before",
         "after":  "InheritanceTrain/1/1After"
@@ -60,6 +60,7 @@ inheritance_training_data = {
         "after":  "InheritanceTrain/3/3After"
     }
 }
+
 
 
 

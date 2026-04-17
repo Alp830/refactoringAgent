@@ -10,57 +10,42 @@ import zipfile
 import re
 
 training_data = {
-    1: {
-        "before": "train/1/1Before",
-        "after":  "train/1/1After"
-    },
-    2: {
-        "before": "train/2/2Before",
-        "after":  "train/2/2After"
-    },
-    3: {
-        "before": "train/3/3Before",
-        "after":  "train/3/3After"
-    },
-    4: {
-        "before": "train/4/4Before",
-        "after":  "train/4/4After"
-    },
-    5: {
-        "before": "train/5/5Before",
-        "after":  "train/5/5After"
-    }
+    i: {
+        "before": f"train/{i}/{i}Before",
+        "after":  f"train/{i}/{i}After"
+    } for i in range(1, 6)
 }
 inheritance_training_data = {
-    1: {
-        "before": "InheritanceTrain/1/1Before",
-        "after":  "InheritanceTrain/1/1After"
-    },
-    2: {
-        "before": "InheritanceTrain/2/2Before",
-        "after":  "InheritanceTrain/2/2After"
-    },
-    3: {
-        "before": "InheritanceTrain/3/3Before",
-        "after":  "InheritanceTrain/3/3After"
-    }
+    i: {
+        "before": f"InheritanceTrain/{i}/{i}Before",
+        "after":  f"InheritanceTrain/{i}/{i}After"
+    } for i in range(1, 4)
+}
+events_training_data = {
+    i: {
+        "before": f"EventTrain/{i}/{i}Before",
+        "after":  f"EventTrain/{i}/{i}After"
+    } for i in range(1, 5)
+
 }
 
-eventTrainData = {
-    1: {
-        "before": "InheritanceTrain/1/1Before",
-        "after":  "InheritanceTrain/1/1After"
-    },
-    2: {
-        "before": "InheritanceTrain/2/2Before",
-        "after":  "InheritanceTrain/2/2After"
-    },
-    3: {
-        "before": "InheritanceTrain/3/3Before",
-        "after":  "InheritanceTrain/3/3After"
-    }
+
+cache_training_data = {
+    i: {
+        "before": f"cache_train/{i}/{i}Before",
+        "after":  f"cache_train/{i}/{i}After"
+    } for i in range(1, 18)
+
+    
+
 }
 
+no_public_training_data = {
+    i: {
+        "before": f"NoPublicAgentTrainData/{i}/{i}Before",
+        "after":  f"NoPublicAgentTrainData/{i}/{i}After"
+    } for i in range(1, 6)
+}
 
 
 
@@ -116,10 +101,12 @@ def _build_training_prompt_parts(training_map: dict, local_root: str) -> list[st
 
 
 training_prompt_parts = _build_training_prompt_parts(training_data, "train")
+no_public_prompt_parts = _build_training_prompt_parts(no_public_training_data, "NoPublicAgentTrainData")
 inheritance_prompt_parts = _build_training_prompt_parts(
     inheritance_training_data, "InheritanceTrain"
 )
-
+events_prompt_parts = _build_training_prompt_parts(events_training_data, "EventTrain")
+cache_prompt_parts = _build_training_prompt_parts(cache_training_data, "cache_train")
 code_refactor_agent_instance = Agent(
     name="updateCode",
     model="gemini-2.0-flash",
@@ -136,7 +123,7 @@ code_refactor_agent_instance = Agent(
         "Do not include any extra commentary.\n"
         "[1] Get all data information that will shortly be given to you.\n"
         "[2] Determine whether the script requires a change from boolean to enum.\n"
-        "[3] If a change is required, return the whole script with that change; "
+        "[3] If a change is required, return the whole script with that change"
         "otherwise, return the original script.\n\n"
         + "\n".join(training_prompt_parts)
     ),
@@ -150,14 +137,47 @@ code_inheritance = Agent(
     model="gemini-2.0-flash",
     description="An agent whose job is to modify a given text snippet based on provided examples.",
     instruction=(
-        "You are an agent whose job is to modify a given text snippet based on "
-        "the information given to you from past examples.\n"
-        "return the full c# script.\n"
-        "[1] Get all data information that will shortly be given to you.\n"
-        "[2] Use tool ''.\n"
-        "[3]Once you have your output with the  "
-        "otherwise, return the original script.\n\n"
+        "You are an agent whose job is to modify a given text snippet based on the information given to you from past examples.\n"
+        "Input is a c# script, return the refactored script like the data given to you.\n"
+        "Get the returned script as a text block in the format that you were given in the data.\n\n"
         + "\n".join(inheritance_prompt_parts)
+    ),
+    input_schema=UpdateCodeInput
+)
+
+code_events = Agent(
+    name="events_refactor_agent",
+    model="gemini-2.0-flash",
+    description="An agent whose job is to modify a given text snippet based on provided examples.",
+    instruction=(
+        "You are an agent whose job is to modify a given text snippet based on the information given to you from past examples.\n"
+        "Input is a c# script, return the refactored script like the data given to you.\n"
+        "Get the returned script as a text block in the format that you were given in the data.\n\n"
+        + "\n".join(events_prompt_parts)
+    ),
+    input_schema=UpdateCodeInput
+)
+code_cache = Agent(
+    name="cache_refactor_agent",
+    model="gemini-2.0-flash",
+    description="An agent whose job is to modify a given text snippet based on provided examples.",
+    instruction=(
+        "You are an agent whose job is to modify a given text snippet based on the information given to you from past examples.\n"
+        "Input is a c# script, return the refactored script like the data given to you.\n"
+        "Get the returned script as a text block in the format that you were given in the data.\n\n"
+        + "\n".join(cache_prompt_parts)
+    ),
+    input_schema=UpdateCodeInput
+)
+code_no_public = Agent(
+    name="no_public_refactor_agent",
+    model="gemini-2.0-flash",
+    description="An agent whose job is to modify a given text snippet based on provided examples.",
+    instruction=(
+        "You are an agent whose job is to modify a given text snippet based on the information given to you from past examples.\n"
+        "Input is a c# script, return the refactored script like the data given to you.\n"
+        "Get the returned script as a text block in the format that you were given in the data.\n\n"
+        + "\n".join(no_public_prompt_parts)
     ),
     input_schema=UpdateCodeInput
 )
@@ -166,7 +186,9 @@ code_inheritance = Agent(
 # Wrap the agents as tools so the model can call them by name.
 update_code_tool_instance = AgentTool(agent=code_refactor_agent_instance)
 inheritance_tool_instance = AgentTool(agent=code_inheritance)
-
+code_events_instance = AgentTool(agent=code_events)
+cache_tool_instance = AgentTool(agent=code_cache)
+code_no_public = AgentTool(agent=code_no_public)
 
 def _after_tool_callback(tool, args, tool_context, tool_response):
     # Ensure the tool response is a plain C# string, not JSON-wrapped.
@@ -215,7 +237,7 @@ async def _before_model_callback(callback_context, llm_request):
         return None
 
     for fr in func_responses:
-        if fr.name != "updateCode":
+        if fr.name not in ["updateCode", "inheritance_agent", "events_refactor_agent", "cache_refactor_agent", "no_public_refactor_agent"]:
             continue
         result = fr.response
         if isinstance(result, dict) and "result" in result:
@@ -260,32 +282,41 @@ async def _before_model_callback(callback_context, llm_request):
     return None
 
 root_agent = Agent(
-    name="weather_time_agent",
+    name="game_dev_refactor_agent",
     model="gemini-2.0-flash",
     description=(
-        "You are an agent with the task to refactor my game development logic"
+        "You are an agent with the task to refactor my game development logic, or guess what agent you have to use for that snippit"
     ),
     instruction=(
-        "Your primary goal is to refactor C# code snippets.\n"
-        "When a user provides C# code, you MUST do the following:\n"
-        "1. Extract multiple files from text blocks in the message. Format:\n"
-        "   FILE: <path>\n"
-        "   ```csharp\n"
-        "   <content>\n"
-        "   ```\n"
-        "   If no FILE blocks are present, treat the entire user message as a single C# file:\n"
-        "   FILE: Input.cs\n"
-        "   ```csharp\n"
-        "   <entire user message>\n"
-        "   ```\n"
-        "2. Choose the correct tool based on the task:\n"
-        "   - Use updateCode for bool->enum refactors.\n"
-        "   - Use inheritance_agent for inheritance refactors.\n"
-        "3. Call the chosen tool with JSON args:\n"
-        "   {\"files\": [{\"path\": \"...\", \"content\": \"...\"}]}\n"
-        "4. Do not add commentary; the system will return a downloadable zip.\n"
+        """You are a C# code refactoring agent. Your job is to analyze the user's C# script and refactor it based on the training examples provided.
+
+TOOL SELECTION:
+- Use the 'updateCode' tool for boolean-to-enum refactorings
+- Use the 'inheritance_agent' tool for inheritance pattern refactorings
+- Use the 'events_refactor_agent' tool for event pattern refactorings
+(note: multiple scripst are required for events agent since the goal of events is to minimize unnecisary dependencies between scripts, not to make code cleaner)
+- Use the 'cache_refactor_agent' tool for cache pattern refactorings
+- Use the 'No public' tool when there is a unnecisary public that exposes a variable for no reason (a public without a getter)
+
+- If the user explicitly specifies which tool to use, always respect that choice
+
+INSTRUCTIONS:
+1. Analyze the provided C# script against the training examples
+2. Determine which refactoring type is needed
+3. Call the appropriate tool with the script as input
+4. Return the complete refactored script in the exact format shown in the training data
+5. Do NOT include any commentary, explanations, or extra text - only return the refactored code
+
+OUTPUT FORMAT:
+Return refactored code as text blocks using this format:
+FILE: <filename>
+```csharp
+<complete refactored code>
+```
+
+Always return the FULL script after refactoring, not just the changed parts."""
     ),
-    tools=[update_code_tool_instance, inheritance_tool_instance],
+    tools=[update_code_tool_instance, inheritance_tool_instance, code_events_instance,cache_tool_instance],
     before_model_callback=_before_model_callback,
     after_tool_callback=_after_tool_callback,
 )
